@@ -15,7 +15,8 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false
+      showPlayModal: false,
+      showLoginModal: false
     };
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -27,18 +28,20 @@ class Header extends React.Component {
       this.props.setId(data);
     })
     socket.on('startGame', data => {
-      this.setState({ showModal: false });
+      this.setState({ showPlayModal: false });
       browserHistory.push('/battlePage');
     })
   }
 
   handleOpenModal () {
-     this.setState({ showModal: true });
-     socket.emit('quickPlay');
+    if(Object.keys(this.props.user).length) {
+      this.setState({ showPlayModal: true });
+      socket.emit('quickPlay');
+    } else this.setState({ showLoginModal: true });
    }
 
    handleCloseModal () {
-     this.setState({ showModal: false });
+     this.setState({ showPlayModal: false, showLoginModal: false });
    }
 
   logout() {
@@ -127,7 +130,7 @@ class Header extends React.Component {
         <ReactModal
           id="quick-play-modal"
           style={modalStyles}
-          isOpen={this.state.showModal}
+          isOpen={this.state.showPlayModal}
           contentLabel="Quick Game!"
           onRequestClose={this.handleCloseModal}>
             <h3>Searching For Game...</h3>
@@ -139,6 +142,15 @@ class Header extends React.Component {
             <button className="btn btn-modal" onClick={this.handleCloseModal}>
               Quit Search
             </button>
+        </ReactModal>
+        <ReactModal
+          id="login-prompt-modal"
+          style={modalStyles}
+          isOpen={this.state.showLoginModal}
+          contentLabel="Please log in"
+        >
+          <h3>Please log in to access quick play</h3>
+          <button className="btn btn-modal" onClick={this.handleCloseModal}></button>
         </ReactModal>
       </div>
     );
