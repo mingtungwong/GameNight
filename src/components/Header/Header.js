@@ -150,7 +150,7 @@ class Header extends React.Component {
           contentLabel="Please log in"
         >
           <h3>Please log in to access quick play</h3>
-          <button className="btn btn-modal" onClick={this.handleCloseModal}></button>
+          <button className="btn btn-modal" onClick={this.handleCloseModal}>Close</button>
         </ReactModal>
       </div>
     );
